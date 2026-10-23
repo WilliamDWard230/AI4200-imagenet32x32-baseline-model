@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-
+import torch.nn.functional as F
 
 # Each task differs only in its input size and its number of classes.
 # The same model class is used for all three.
@@ -70,7 +70,7 @@ class ResidualMLP(nn.Module):
         x = self.input_layer(x)
         for block in self.blocks:
             x = block(x)
-        x = self.head_fc2(torch.tanh(self.head_fc1(self.head_norm(x))))
+        x = self.head_fc2(F.silu(self.head_fc1(self.head_norm(x))))
         return x
 
     def predict(self, x):
