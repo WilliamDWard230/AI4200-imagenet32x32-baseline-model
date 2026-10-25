@@ -23,7 +23,7 @@ class Block(nn.Module):
         self.norm = nn.LayerNorm(width)       # pre-norm: normalize before the layers
         self.fc1 = nn.Linear(width, hidden)   # expand:  width  -> hidden
         self.fc2 = nn.Linear(hidden, width)   # project: hidden -> width
-        self.dropout = nn.Dropout(p=0.20)
+        self.dropout = nn.Dropout(p=0.2)
 
     def forward(self, x):
         h = F.gelu(self.fc1(self.norm(x)))
@@ -36,7 +36,7 @@ class PatchMixingBlock(nn.Module):
     def __init__(self, num_patches, width, hidden = 128):
         super().__init__()
         self.norm = nn.LayerNorm(width)
-        self.fc1 = nn.Linear(num_patches, hidden) 
+        self.fc1 = nn.Linear(num_patches, hidden)
         self.fc2 = nn.Linear(hidden, num_patches)
 
     def forward(self, x):
@@ -68,7 +68,7 @@ class ResidualMLP(nn.Module):
     differs from its input size (width), so the two cannot be added.
     """
 
-    def __init__(self, image_size, channels, num_classes, width=128, hidden=256, depth=15, patch_size = 4, patch_hidden = 128):
+    def __init__(self, image_size, channels, num_classes, width=128, hidden=512, depth=15, patch_size = 4, patch_hidden = 128):
         super().__init__()
 
         self.patch_size = patch_size
