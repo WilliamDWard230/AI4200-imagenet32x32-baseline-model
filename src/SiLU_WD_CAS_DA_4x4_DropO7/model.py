@@ -7,7 +7,7 @@ import torch.nn.functional as F
 TASKS = {
     "mnist":      {"image_size": 28, "channels": 1, "num_classes": 10, "patch_size": 4},    # 28x28 grayscale
     "cifar10":    {"image_size": 32, "channels": 3, "num_classes": 10, "patch_size": 4},    # 32x32 color
-    "imagenet32": {"image_size": 32, "channels": 3, "num_classes": 1000, "patch_size": 8},  # 32x32 color
+    "imagenet32": {"image_size": 32, "channels": 3, "num_classes": 1000, "patch_size": 8, "patch_hidden": 128, "hidden": 256},  # 32x32 color
 }
 
 
