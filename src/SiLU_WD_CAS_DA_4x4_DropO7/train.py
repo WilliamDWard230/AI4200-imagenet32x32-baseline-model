@@ -16,7 +16,7 @@ BATCH_SIZES = {
     "cifar10": 128,
     "imagenet32": 512,
 }
-EPOCHS = {"mnist": 10, "cifar10": 90, "imagenet32": 20}
+EPOCHS = {"mnist": 18, "cifar10": 90, "imagenet32": 18}
 
 
 def prepare(X):
