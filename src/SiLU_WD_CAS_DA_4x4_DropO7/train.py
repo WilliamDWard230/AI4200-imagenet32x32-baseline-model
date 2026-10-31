@@ -11,7 +11,11 @@ from .model import TASKS, ResidualMLP
 # Baseline settings. Deliberately plain so they are easy to beat:
 # plain SGD, constant learning rate, no dropout, no schedule, no augmentation.
 LEARNING_RATE = 1e-3
-BATCH_SIZE = 128
+BATCH_SIZES = {
+    "mnist": 128,
+    "cifar10": 128,
+    "imagenet32": 512,
+}
 EPOCHS = {"mnist": 10, "cifar10": 90, "imagenet32": 10}
 
 
@@ -182,7 +186,7 @@ def train(task, X_train, y_train, seed=0, device="cuda", epoch_callback=None):
 
     loader = DataLoader(
         dataset,
-        batch_size=BATCH_SIZE,
+        batch_size=BATCH_SIZES[task],
         shuffle=True
     )
 
