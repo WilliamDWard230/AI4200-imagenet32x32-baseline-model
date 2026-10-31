@@ -430,3 +430,502 @@
 
 **Reproducibility:** Package `GeLU_WD_CAS_DA_8x8_DropO7`, seed `0`, train count `45000`, validation count `5000`, run ID `20261026_120408_baseline_GeLU_WD_CAS_DA_8x8_DropO7`. GeLU, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 25% H-Flipping, 25% erasure, 25% +- 1- rotations.
 
+### Change 28 — cifar10 — 2026-10-28
+
+**Change:** Reduced data augmentation rates to 20%
+
+**Why:** Reducing down to 25% saved on compute and had little effect on accuracy, will drop as low as a I can.
+
+**Expected:** Similar accuracy and reduced comptue time
+
+**Result:** Validation accuracy 69.02%; train accuracy 100.00%; validation loss 1.6020; train loss 0.0006; 4.21 min on cuda. Train/validation accuracy gap: 30.98%.
+
+**Loss curve:** Epoch loss 1.6547 → 0.0404 over 30 logged epochs.
+
+**Interpretation / next step:** This was a bit more of a drop than i anticipated, but I still think the saved compute will be worth it. I think having a smaller percentage of a wide variety of augemntation methods will help more than a large percentage of a few, so i will keep it at 20% and add another method.
+
+**Reproducibility:** Package `GeLU_WD_CAS_DA_8x8_DropO8`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_154738_baseline_GeLU_WD_CAS_DA_8x8_DropO8`. GeLU, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations.
+### Change 29 — cifar10 — 2026-10-28
+
+**Change:** Added 20% +- 20% brightness
+
+**Why:** Hoping that another form of augmentation will improve generalization.
+
+**Expected:** Similar accuracy and reduced comptue time
+
+**Result:** Validation accuracy 70.02%; train accuracy 100.00%; validation loss 1.6296; train loss 0.0003; 4.68 min on cuda. Train/validation accuracy gap: 29.98%.
+
+**Loss curve:** Epoch loss 1.6132 → 0.0293 over 30 logged epochs.
+
+**Interpretation / next step:** This did not significantly increase compute time and regained most of the lost accuracy. I will add another form of data augmentation and see the additional effect. 
+
+**Reproducibility:** Package `GeLU_WD_CAS_DA_8x8_DropO9`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_160242_baseline_GeLU_WD_CAS_DA_8x8_DropO9`.  GeLU, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness.
+
+### Change 30 — cifar10 — 2026-10-28
+
+**Change:** Added 20% +- 2 shift pixel
+
+**Why:** Attempting to improve generalization
+
+**Expected:** Improved accuracy for some additional compute time
+
+**Result:** Validation accuracy 72.08%; train accuracy 100.00%; validation loss 1.3611; train loss 0.0008; 5.33 min on cuda. Train/validation accuracy gap: 27.92%.
+
+**Loss curve:** Epoch loss 1.5788 → 0.0646 over 30 logged epochs.
+
+**Interpretation / next step:** This did drastically improve generalization (2%), but the added compute time is concerning. I will increase shift to +-3
+
+**Reproducibility:** Package `GeLU_WD_CAS_DA_8x8_DropO10`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_162231_baseline_GeLU_WD_CAS_DA_8x8_DropO10`. GeLU, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 2 pixel shift.
+
+### Change 31 — cifar10 — 2026-10-28
+
+**Change:** changed to +- 3 pixel shift
+
+**Why:** More drastic shifts may improve generalization
+
+**Expected:** Better generalization
+
+**Result:** Validation accuracy 72.32%; train accuracy 100.00%; validation loss 1.3457; train loss 0.0010; 5.33 min on cuda. Train/validation accuracy gap: 27.68%.
+
+**Loss curve:** Epoch loss 1.5808 → 0.0862 over 30 logged epochs.
+
+**Interpretation / next step:** Very little change, though slight improvement. I will keep at +-3 for now. I will now try out a different activation function.
+
+**Reproducibility:** Package `GeLU_WD_CAS_DA_8x8_DropO11`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_163606_baseline_GeLU_WD_CAS_DA_8x8_DropO11`. GeLU, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift.
+
+### Change 32 — cifar10 — 2026-10-28
+
+**Change:** Changed activation to SiLU
+
+**Why:** Exploring my options.
+
+**Expected:** I have no expectations.
+
+**Result:** Validation accuracy 72.92%; train accuracy 100.00%; validation loss 1.3331; train loss 0.0022; 5.35 min on cuda. Train/validation accuracy gap: 27.08%.
+
+**Loss curve:** Epoch loss 1.6086 → 0.1033 over 30 logged epochs.
+
+**Interpretation / next step:** One intersting observation is that higher loss has typically translate to better generalization. SiLU improved generalization a bit. I think i will add a beta of 0.5 and switch to swish. 
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_164608_baseline_SiLU_WD_CAS_DA_8x8_DropO`. SiLU, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift.
+
+### Change 33 — cifar10 — 2026-10-28
+
+**Change:** Changed activation to swish with beta of 0.5
+
+**Why:** Exploring my options.
+
+**Expected:** Slightly lower loss and perhaps better generalization or even worse
+
+**Result:** Validation accuracy 72.08%; train accuracy 99.96%; validation loss 1.1676; train loss 0.0148; 5.53 min on cuda. Train/validation accuracy gap: 27.88%.
+
+**Loss curve:** Epoch loss 1.6820 → 0.1722 over 30 logged epochs.
+
+**Interpretation / next step:** Loss and accuracy were worse. An aggressive beta did not help. Will switch to 0.85 to see middle ground change from SiLU
+
+**Reproducibility:** Package `Swish_p5_WD_CAS_DA_8x8_DropO`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_170012_baseline_Swish_p5_WD_CAS_DA_8x8_DropO`. Swish 0.5, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift.
+
+### Change 34 — cifar10 — 2026-10-28
+
+**Change:** Changed beta to 0.85
+
+**Why:** Exploring my options.
+
+**Expected:** Slightly lower loss and higher accuracy
+
+**Result:** Validation accuracy 72.60%; train accuracy 100.00%; validation loss 1.2476; train loss 0.0031; 5.56 min on cuda. Train/validation accuracy gap: 27.40%.
+
+**Loss curve:** Epoch loss 1.6214 → 0.1134 over 30 logged epochs.
+
+**Interpretation / next step:** A beta value closer to silu seems to do better. will revert to silu. Will look into less depth.
+
+**Reproducibility:** Package `Swish_p85_WD_CAS_DA_8x8_DropO`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_171001_baseline_Swish_p85_WD_CAS_DA_8x8_DropO`. Swish 0.85, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift.
+
+### Change 35 — cifar10 — 2026-10-28
+
+**Change:** Changed back to Silu and reduced depth to 12
+
+**Why:** Exploring my options.
+
+**Expected:** worse
+
+**Result:** Validation accuracy 72.66%; train accuracy 100.00%; validation loss 1.2489; train loss 0.0032; 4.77 min on cuda. Train/validation accuracy gap: 27.34%.
+
+**Loss curve:** Epoch loss 1.6157 → 0.1230 over 30 logged epochs.
+
+**Interpretation / next step:** Reduced depth seems fine. Basically no change in accuracy, and significantly less compute. Got the goahead to use gated blocks, so i will be switching to SwiGLU. everything else will be the same
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO1`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_172140_baseline_SiLU_WD_CAS_DA_8x8_DropO1`. SiLU , 12 C-Blocks, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift.
+
+
+### Change 36 — cifar10 — 2026-10-28
+
+**Change:** Added 20% 0.8-1.2 contrast augmentation
+
+**Why:** Model perfectly predicts training, but fails to generalize, i guess i need more augmentation to help
+
+**Expected:** better accuracy and more compute
+
+**Result:** Validation accuracy 73.04%; train accuracy 100.00%; validation loss 1.2047; train loss 0.0018; 7.72 min on cuda. Train/validation accuracy gap: 26.96%.
+
+**Loss curve:** Epoch loss 1.5878 → 0.1039 over 30 logged epochs.
+
+**Interpretation / next step:** Model still perfectly predicts training. Will add more augmentation. 
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO2`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_215007_baseline_SiLU_WD_CAS_DA_8x8_DropO2`. SiLU , 12 C-Blocks, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift, 20% 0.8-1.2 contrast augmentation.
+
+### Change 37 — cifar10 — 2026-10-28
+
+**Change:** Added 20% 0.8-1.2 color saturation augmentation
+
+**Why:** Model needs to generalize. Augmentation is all i can think of to help.
+
+**Expected:** better accuracy and more compute
+
+**Result:** Validation accuracy 72.64%; train accuracy 100.00%; validation loss 1.3178; train loss 0.0015; 9.65 min on cuda. Train/validation accuracy gap: 27.36%.
+
+**Loss curve:** Epoch loss 1.5775 → 0.1004 over 30 logged epochs.
+
+**Interpretation / next step:** Pretty significant jump in validation loss. I guess this was a bad change. Will revert to SiLU_WD_CAS_DA_8x8_DropO2 and add a different augmentation
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO3`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_220611_baseline_SiLU_WD_CAS_DA_8x8_DropO3`. SiLU , 12 C-Blocks, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift, 20% 0.8-1.2 contrast augmentation, 20% 0.8-1.2 color saturation augmentation.
+
+### Change 38 — cifar10 — 2026-10-28
+
+**Change:** Added 20% cropping and resizing
+
+**Why:** Model needs to generalize. Augmentation is all i can think of to help.
+
+**Expected:** better accuracy and more compute
+
+**Result:** Validation accuracy 73.36%; train accuracy 100.00%; validation loss 1.2972; train loss 0.0014; 9.32 min on cuda. Train/validation accuracy gap: 26.64%.
+
+**Loss curve:** Epoch loss 1.5815 → 0.0973 over 30 logged epochs.
+
+**Interpretation / next step:** The validaiton loss did not substantially improve though accuracy is slightly better. compute time may not be worth. 
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO4`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_222236_baseline_SiLU_WD_CAS_DA_8x8_DropO4`. SiLU , 12 C-Blocks, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift, 20% 0.8-1.2 contrast augmentation, 20% crop and resize
+### Change 39 — cifar10 — 2026-10-28
+
+**Change:** changed augmentations to 30% and increased batach size to 512
+
+**Why:** I can't think of any more augmentations to add. Will increase batch size to add more augmentation %
+
+**Expected:** No idea
+
+**Result:** Validation accuracy 73.70%; train accuracy 100.00%; validation loss 1.3031; train loss 0.0012; 8.64 min on cuda. Train/validation accuracy gap: 26.30%.
+
+**Loss curve:** Epoch loss 1.5639 → 0.0937 over 30 logged epochs.
+
+**Interpretation / next step:** Slight improvement.
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO5`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_224223_baseline_SiLU_WD_CAS_DA_8x8_DropO5`. SiLU , 12 C-Blocks, 512 batch size, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 30% H-Flipping, 30% erasure, 30% +- 1- rotations, 30% +-Brightness, 30% +- 3 pixel shift, 30% 0.8-1.2 contrast augmentation, 30% crop and resize
+
+### Change 40 — cifar10 — 2026-10-28
+
+**Change:** Increased augmentation to 40% and batch size to 1024
+
+**Why:** Worked last time, lets see if the trend continues
+
+**Expected:** better accuracy and less compute
+
+**Result:** Validation accuracy 73.80%; train accuracy 100.00%; validation loss 1.2077; train loss 0.0019; 10.20 min on cuda. Train/validation accuracy gap: 26.20%.
+
+**Loss curve:** Epoch loss 1.5869 → 0.1150 over 30 logged epochs.
+
+**Interpretation / next step:** This did not really provide futher benfit. Validation loss seems a bit high, so will try out a more aggressive starting LR
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO6`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_230038_baseline_SiLU_WD_CAS_DA_8x8_DropO6`. SiLU , 12 C-Blocks, 1024 batch size, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 40% H-Flipping, 40% erasure, 40% +- 1- rotations, 40% +-Brightness, 40% +- 3 pixel shift, 40% 0.8-1.2 contrast augmentation, 40% crop and resize
+
+### Change 41 — cifar10 — 2026-10-28
+
+**Change:** increased learning rate to 3e-3
+
+**Why:** With fewer updates, will try more aggresive updates to compensate
+
+**Expected:** better accuracy
+
+**Result:** Validation accuracy 73.82%; train accuracy 100.00%; validation loss 1.3696; train loss 0.0003; 10.17 min on cuda. Train/validation accuracy gap: 26.18%.
+
+**Loss curve:** Epoch loss 1.6869 → 0.0655 over 30 logged epochs.
+
+**Interpretation / next step:**  This provided almost no benefit and actually incrased validaiton loss some. Will keep for now and explore increasing representation dimensions.
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO7`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_231227_baseline_SiLU_WD_CAS_DA_8x8_DropO7`. SiLU , 12 C-Blocks, 1024 batch size, LR: 3e-3, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 40% H-Flipping, 40% erasure, 40% +- 1- rotations, 40% +-Brightness, 40% +- 3 pixel shift, 40% 0.8-1.2 contrast augmentation, 40% crop and resize
+
+### Change 42 — cifar10 — 2026-10-28
+
+**Change:** Increased width and patch hidden (residual) from 128 to 256
+
+**Why:** With fewer updates, will try more aggresive updates to compensate
+
+**Expected:** better accuracy
+
+**Result:** Validation accuracy 73.46%; train accuracy 100.00%; validation loss 1.5048; train loss 0.0001; 13.10 min on cuda. Train/validation accuracy gap: 26.54%.
+
+**Loss curve:** Epoch loss 1.7541 → 0.0444 over 30 logged epochs.
+
+**Interpretation / next step:** None of these past few changes have helped. I am going to revert back to SiLU_WD_CAS_DA_8x8_DropO1 and see if i can fine tune that any futher. 
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO8`, seed `0`, train count `45000`, validation count `5000`, run ID `20261028_232847_baseline_SiLU_WD_CAS_DA_8x8_DropO8`. 
+
+### Change 43 — cifar10 — 2026-10-29
+
+**Change:** reverted back to SiLU_WD_CAS_DA_8x8_DropO9 and increased batch size to 512
+
+**Why:** I want to revert back to a working model and try to reduce compute without negatively impacting accuracy
+
+**Expected:** less compute
+
+**Result:** Validation accuracy 71.64%; train accuracy 100.00%; validation loss 1.1928; train loss 0.0056; 4.43 min on cuda. Train/validation accuracy gap: 28.36%.
+
+**Loss curve:** Epoch loss 1.6211 → 0.1604 over 30 logged epochs.
+
+**Interpretation / next step:** A pretty significant drop in accuracy, but three less minutes of training time. I can take that. I also notice that validation loss is lower. Perhaps now that the model is not as overly confident as it once was, I can adjust dropout. 
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO9`, seed `0`, train count `45000`, validation count `5000`, run ID `20261029_101239_baseline_SiLU_WD_CAS_DA_8x8_DropO9`. SiLU , 512 batch size, 12 C-Blocks, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift, 20% 0.8-1.2 contrast augmentation.
+
+### Change 44 — cifar10 — 2026-10-29
+
+**Change:** removed dropout
+
+**Why:** I had dropout because model was confidently wrong. Now it is less confident but still wrong, perhaps additional parameters will help
+
+**Expected:** worse generalization. I don't think it will work but i'm at my wits end
+
+**Result:** Validation accuracy 70.44%; train accuracy 100.00%; validation loss 1.3380; train loss 0.0030; 4.32 min on cuda. Train/validation accuracy gap: 29.56%.
+
+**Loss curve:** Epoch loss 1.6041 → 0.1039 over 30 logged epochs.
+
+**Interpretation / next step:** Removing drop out failed. Will bring back and increase to 30%.
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO10`, seed `0`, train count `45000`, validation count `5000`, run ID `20261029_102126_baseline_SiLU_WD_CAS_DA_8x8_DropO10`. SiLU , 512 batch size, 12 C-Blocks, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift, 20% 0.8-1.2 contrast augmentation.
+
+### Change 45 — cifar10 — 2026-10-29
+
+**Change:** added and increased dropout to 30%
+
+**Why:** Removing did not help, so perhaps increasing will.
+
+**Expected:** Improved accuracy. 
+
+**Result:** Validation accuracy 72.08%; train accuracy 99.98%; validation loss 1.1540; train loss 0.0115; 4.48 min on cuda. Train/validation accuracy gap: 27.90%.
+
+**Loss curve:** Epoch loss 1.6355 → 0.2010 over 30 logged epochs.
+
+**Interpretation / next step:** Interestingly train accuracy is no longer 100%. The validaiton accuracy score also climbed back up a bit. Will increase drop out to 40%. 
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO11`, seed `0`, train count `45000`, validation count `5000`, run ID `20261029_103000_baseline_SiLU_WD_CAS_DA_8x8_DropO11`. SiLU , 512 batch size, 12 C-Blocks, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 30% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift, 20% 0.8-1.2 contrast augmentation.
+
+### Change 46 — cifar10 — 2026-10-29
+
+**Change:** 40% dropout
+
+**Why:** More dropout helped
+
+**Expected:** Increased validation accuracy and lower training accuracy. Lower validaiton loss
+
+**Result:** Validation accuracy 71.80%; train accuracy 99.93%; validation loss 1.1191; train loss 0.0223; 4.45 min on cuda. Train/validation accuracy gap: 28.13%.
+
+**Loss curve:** Epoch loss 1.6532 → 0.2387 over 30 logged epochs.
+
+**Interpretation / next step:** 40% dropout did not help. I'm going to return back to SiLU_WD_CAS_DA_8x8_DropO2. I think I can use a lower learning rate and more epochs to squeeze out better results. 
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO12`, seed `0`, train count `45000`, validation count `5000`, run ID `20261029_104205_baseline_SiLU_WD_CAS_DA_8x8_DropO12`. SiLU , 512 batch size, 12 C-Blocks, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 40% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift, 20% 0.8-1.2 contrast augmentation.
+
+### Change 47 — cifar10 — 2026-10-29
+
+**Change:** 90 epochs and 7e-4 lr
+
+**Why:** I think a gradual descent over a longer period will result in higher accuracy
+
+**Expected:** longer training time and higher accuracy
+
+**Result:** Validation accuracy 75.72%; train accuracy 100.00%; validation loss 1.4378; train loss 0.0001; 16.90 min on cuda. Train/validation accuracy gap: 24.28%.
+
+**Loss curve:** Epoch loss 1.5710 → 0.0424 over 90 logged epochs.
+
+**Interpretation / next step:** This is what I expected. Need to reduce training time. will try with less depth. 
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO13`, seed `0`, train count `45000`, validation count `5000`, run ID `20261029_205447_baseline_SiLU_WD_CAS_DA_8x8_DropO13`. SiLU , 12 C-Blocks, 90 epochs, 7e-4 lr, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift, 20% 0.8-1.2 contrast augmentation.
+
+### Change 48 — cifar10 — 2026-10-29
+
+**Change:** 12 --> 8 composite layers
+
+**Why:** Need to reduce training time
+
+**Expected:** similar accuracy and less training time
+
+**Result:** Validation accuracy 74.44%; train accuracy 100.00%; validation loss 1.3526; train loss 0.0002; 13.86 min on cuda. Train/validation accuracy gap: 25.56%.
+
+**Loss curve:** Epoch loss 1.5969 → 0.0508 over 90 logged epochs.
+
+**Interpretation / next step:** Bit too much of an accuracy drop, will revert and use less augmentation %
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO14`, seed `0`, train count `45000`, validation count `5000`, run ID `20261029_211902_baseline_SiLU_WD_CAS_DA_8x8_DropO14`. SiLU , 8 C-Blocks, 90 epochs, 7e-4 lr, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift, 20% 0.8-1.2 contrast augmentation.
+
+### Change 49 — cifar10 — 2026-10-29
+
+**Change:** back to 12, reduced down to 15% on augmentations
+
+**Why:** Need to reduce training time
+
+**Expected:** similar accuracy and less training time
+
+**Result:** Validation accuracy 74.70%; train accuracy 100.00%; validation loss 1.4290; train loss 0.0001; 15.36 min on cuda. Train/validation accuracy gap: 25.30%.
+
+**Loss curve:** Epoch loss 1.6130 → 0.0402 over 100 logged epochs.
+
+**Interpretation / next step:** This did not help. will revert and try out batch norm
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO15`, seed `0`, train count `45000`, validation count `5000`, run ID `20261029_213712_baseline_SiLU_WD_CAS_DA_8x8_DropO15`. SiLU , 12 C-Blocks, 90 epochs, 7e-4 lr, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 15% H-Flipping, 15% erasure, 15% +- 1- rotations, 15% +-Brightness, 15% +- 3 pixel shift, 15% 0.8-1.2 contrast augmentation.
+
+### Change 50 — cifar10 — 2026-10-29
+
+**Change:** back to 20%, swapped to batchNorm
+
+**Why:** Need to increase accuracy
+
+**Expected:** similar accuracy or better
+
+**Result:** Validation accuracy 74.98%; train accuracy 100.00%; validation loss 1.3930; train loss 0.0001; 17.69 min on cuda. Train/validation accuracy gap: 25.02%.
+
+**Loss curve:** Epoch loss 1.5021 → 0.0386 over 90 logged epochs.
+
+**Interpretation / next step:** This also did not help. Will try data augmentation options
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO16`, seed `0`, train count `45000`, validation count `5000`, run ID `20261029_220833_baseline_SiLU_WD_CAS_DA_8x8_DropO16`. SiLU , 12 C-Blocks, 90 epochs, 7e-4 lr, batch norm, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% +-Brightness, 20% +- 3 pixel shift, 20% 0.8-1.2 contrast augmentation.
+
+
+
+### Change 51 — cifar10 — 2026-10-29
+
+**Change:** reworked data augmentation. now on the fly and 4 options (no brightness, contrast, shift)
+
+**Why:** Need to increase accuracy
+
+**Expected:** similar
+
+**Result:** Validation accuracy 72.00%; train accuracy 100.00%; validation loss 1.4488; train loss 0.0007; 12.95 min on cuda. Train/validation accuracy gap: 28.00%.
+
+**Loss curve:** Epoch loss 1.7798 → 0.0550 over 90 logged epochs.
+
+**Interpretation / next step:** Accuracy is worse, but the training time reduction is nice. will try adjusting model size.
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_8x8_DropO17`, seed `0`, train count `45000`, validation count `5000`, run ID `20261029_225213_baseline_SiLU_WD_CAS_DA_8x8_DropO17`.  SiLU , 12 C-Blocks, 90 epochs, 7e-4 lr, WD, patching (8x8), AdamW, 512 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% 0.8 - 1.2
+
+
+### Change 52 — cifar10 — 2026-10-30
+
+**Change:** 4x4 and 128 hidden and 64 patch hidden and 10 depth. (big rework sorry)
+
+**Why:** Looked to MLP-Mixer and realized i was compressing patch information instead of expanding. 
+
+**Expected:** shorter training time
+
+**Result:** Validation accuracy 70.04%; train accuracy 99.02%; validation loss 1.1780; train loss 0.0655; 12.43 min on cuda. Train/validation accuracy gap: 28.98%.
+
+**Loss curve:** Epoch loss 1.7868 → 0.2439 over 90 logged epochs.
+
+**Interpretation / next step:** Large drop in accuracy. will try 256 hidden
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_4x4_DropO`, seed `0`, train count `45000`, validation count `5000`, run ID `20261030_134141_baseline_SiLU_WD_CAS_DA_4x4_DropO`. 
+SiLU , 10 C-Blocks, 90 epochs, 7e-4 lr, WD, patching (4x4), AdamW, 128 hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% 0.8 - 1.2
+
+### Change 53 — cifar10 — 2026-10-30
+
+**Change:**256 hidden
+
+**Why:** Looked to MLP-Mixer and realized i was compressing patch information instead of expanding
+
+**Expected:** shorter training time atleast
+
+**Result:** Validation accuracy 69.42%; train accuracy 99.98%; validation loss 1.3804; train loss 0.0123; 12.62 min on cuda. Train/validation accuracy gap: 30.56%.
+
+**Loss curve:** Epoch loss 1.7633 → 0.1345 over 90 logged epochs.
+
+**Interpretation / next step:** This did not work, will increase representation. 
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_4x4_DropO2`, seed `0`, train count `45000`, validation count `5000`, run ID `20261030_135442_baseline_SiLU_WD_CAS_DA_4x4_DropO2`. SiLU , 10 C-Blocks, 90 epochs, 7e-4 lr, WD, patching (4x4), AdamW, 256 hidden, 64 patch hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% 0.8 - 1.2
+
+### Change 54 — cifar10 — 2026-10-30
+
+**Change:** 4x4 and 512 hidden
+
+**Why:** Hoping to expand representation in mlp block
+
+**Expected:** higher accuracy
+
+**Result:** Validation accuracy 71.42%; train accuracy 99.99%; validation loss 1.3652; train loss 0.0060; 13.78 min on cuda. Train/validation accuracy gap: 28.57%.
+
+**Loss curve:** Epoch loss 1.7726 → 0.1062 over 90 logged epochs.
+
+**Interpretation / next step:** This was a slight improvement.
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_4x4_DropO3`, seed `0`, train count `45000`, validation count `5000`, run ID `20261030_141729_baseline_SiLU_WD_CAS_DA_4x4_DropO3`. SiLU , 1 C-Blocks, 90 epochs, 7e-4 lr, WD, patching (4x4), AdamW, 512 hidden, 64 patch hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% erasure, 20% +- 1- rotations, 20% 0.8 - 1.2
+
+### Change 55 — cifar10 — 2026-10-30
+
+**Change:** Added cutmix and removed erasure
+
+**Why:** Added cutmix because it worked for MLP mixer
+
+**Expected:** Higher loss and better generalization
+
+**Result:** Validation accuracy 75.08%; train accuracy 95.07%; validation loss 0.7664; train loss 0.2187; 13.17 min on cuda. Train/validation accuracy gap: 19.99%.
+
+**Loss curve:** Epoch loss 1.9713 → 0.8860 over 90 logged epochs.
+
+**Interpretation / next step:** This was a crazy improvement. Will keep and lower batch size to get more updates.
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_4x4_DropO4`, seed `0`, train count `45000`, validation count `5000`, run ID `20261030_155143_baseline_SiLU_WD_CAS_DA_4x4_DropO4`. SiLU , 10 C-Blocks, 90 epochs, 7e-4 lr, WD, patching (4x4), AdamW, 512 hidden, 64 patch hidden, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% cut mix, 20% +- 1- rotations, 20% 0.8 - 1.2
+
+### Change 56 — cifar10 — 2026-10-30
+
+**Change:** 256 --> 128 batch size
+
+**Why:** More updates might mean better late accuracy
+
+**Expected:** Higher accuracy and longer training time
+
+**Result:** Validation accuracy 77.00%; train accuracy 98.76%; validation loss 0.7404; train loss 0.1036; 14.42 min on cuda. Train/validation accuracy gap: 21.76%.
+
+**Loss curve:** Epoch loss 1.9329 → 0.7981 over 90 logged epochs.
+
+**Interpretation / next step:**  good jump in accuracy. will try adjusting lr to squeeze out more early improvement
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_4x4_DropO5`, seed `0`, train count `45000`, validation count `5000`, run ID `20261030_161037_baseline_SiLU_WD_CAS_DA_4x4_DropO5`. SiLU , 10 C-Blocks, 90 epochs, 7e-4 lr, WD, patching (4x4), AdamW, 512 hidden, 64 patch hidden, 128 batch size, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% cut mix, 20% +- 1- rotations, 20% 0.8 - 1.2
+
+### Change 57 — cifar10 — 2026-10-30
+
+**Change:** 7e-4 --> 8e-4 lr
+
+**Why:** reverting on past experience and hoping that more aggresive learning rate may help
+
+**Expected:** Higher accuracy
+
+**Result:** Validation accuracy 78.24%; train accuracy 99.39%; validation loss 0.7067; train loss 0.0739; 16.71 min on cuda. Train/validation accuracy gap: 21.15%.
+
+**Loss curve:** Epoch loss 1.9345 → 0.7567 over 90 logged epochs.
+
+**Interpretation / next step:** Good improvement. will increase further
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_4x4_DropO6`, seed `0`, train count `45000`, validation count `5000`, run ID `20261030_164922_baseline_SiLU_WD_CAS_DA_4x4_DropO6`. SiLU , 10 C-Blocks, 90 epochs, 8e-4 lr, WD, patching (4x4), AdamW, 512 hidden, 64 patch hidden, 128 batch size, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% cut mix, 20% +- 1- rotations, 20% 0.8 - 1.2
+
+### Change 58 — cifar10 — 2026-10-30
+
+**Change:** 8e-4 --> 1e-3 lr
+
+**Why:** reverting on past experience and hoping that more aggresive learning rate may help
+
+**Expected:** Higher accuracy
+
+**Result:** Validation accuracy 80.52%; train accuracy 99.81%; validation loss 0.6681; train loss 0.0461; 16.30 min on cuda. Train/validation accuracy gap: 19.29%.
+
+**Loss curve:** Epoch loss 1.9325 → 0.7024 over 90 logged epochs.
+
+**Interpretation / next step:** This was a big improvement. Will call it here.
+
+**Reproducibility:** Package `SiLU_WD_CAS_DA_4x4_DropO7`, seed `0`, train count `45000`, validation count `5000`, run ID `20261030_171014_baseline_SiLU_WD_CAS_DA_4x4_DropO7`. SiLU , 10 C-Blocks, 90 epochs, 1e-3 lr, WD, patching (4x4), AdamW, 512 hidden, 64 patch hidden, 128 batch size, cosine annealing scheduler, 20% dropout, 20% H-Flipping, 20% cut mix, 20% +- 1- rotations, 20% 0.8 - 1.2
+
